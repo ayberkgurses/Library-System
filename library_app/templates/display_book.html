@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% block content %}
+<h1>You can display information about books here</h1>
+<p>You can create or end loans here</p>
+
+{% if book %}
+<div>
+    <p><strong>Title:</strong> {{ book.title }}</p>
+    <p><strong>Author Name:</strong> {{ book.author_name }}</p>
+    <p><strong>Publisher:</strong> {{ book.publisher }}</p>
+    <p><strong>Length:</strong> {{ book.length }} pages</p>
+</div>
+{% else %}
+<p>No book found with the provided ID. Please try again.</p>
+{% endif %}
+
+{% endblock %}

@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+{% block content %}
+<h1>You can loan books to members here</h1>
+<p>please fill in the necessary information before submitting.</p>
+
+<form method="post" action="{% url 'loan_book' %}">
+    {% csrf_token %}
+
+    <div>
+        <label><input type="radio" name="action" value="add" required> Add Loan </label>
+        <label><input type="radio" name="action" value="delete"> Delete Loan </label>
+        <label><input type="radio" name="action" value="update"> Update Loan </label>
+    </div>
+
+    <div>
+        <label for="loan_id">Loan Id:</label>
+        <input type="text" id="loan_id" name="loan_id" placeholder="Enter loan id">
+    </div>
+
+    <div>
+        <label for="book_id">Book Id:</label>
+        <input type="text" id="book_id" name="book_id" placeholder="Enter book id">
+    </div>
+
+    <div>
+        <label for="member_id">Member Id:</label>
+        <input type="text" id="member_id" name="member_id" placeholder="Enter member id">
+    </div>
+
+    <div>
+        <label for="loan_date">Loan Date:</label>
+        <input type="text" id="loan_date" name="loan_date" placeholder="Enter loan date">
+    </div>
+
+    <div>
+        <label for="due_date">Due Date:</label>
+        <input type="text" id="due_date" name="due_date" placeholder="Enter due date">
+    </div>
+
+    <div>
+        <label for="return_date">Return Date:</label>
+        <input type="text" id="return_date" name="return_date" placeholder="Enter return date">
+    </div>
+
+    <button type="submit">Submit</button>
+</form>
+
+{% endblock %}

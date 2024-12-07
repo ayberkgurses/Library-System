@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+{% block content %}
+<h1>You can add, delete or update authors here</h1>
+<p>tick the box for the action you want to take and fill in the necessary information before submitting.</p>
+
+<form method="post" action="{% url 'manage_authors' %}">
+    {% csrf_token %}
+
+    <div>
+        <label><input type="radio" name="action" value="add" required> Add Author </label>
+        <label><input type="radio" name="action" value="delete"> Delete Author </label>
+        <label><input type="radio" name="action" value="update"> Update Author </label>
+    </div>
+
+    <div>
+        <label for="author_id">Author Id:</label>
+        <input type="text" id="author_id" name="author_id" placeholder="Enter author id" required>
+    </div>
+
+    <div>
+        <label for="author_name">Author Name:</label>
+        <input type="text" id="author_name" name="author_name" placeholder="Enter author name">
+    </div>
+
+    <button type="submit">Submit</button>
+</form>
+
+{% endblock %}
