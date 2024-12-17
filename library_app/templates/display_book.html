@@ -3,15 +3,31 @@
 <h1>You can display information about books here</h1>
 <p>You can create or end loans here</p>
 
-{% if book %}
-<div>
-    <p><strong>Title:</strong> {{ book.title }}</p>
-    <p><strong>Author Name:</strong> {{ book.author_name }}</p>
-    <p><strong>Publisher:</strong> {{ book.publisher }}</p>
-    <p><strong>Length:</strong> {{ book.length }} pages</p>
-</div>
-{% else %}
-<p>No book found with the provided ID. Please try again.</p>
-{% endif %}
+<!-- display_book.html -->
+<h1>Filtered Books</h1>
 
+<!-- Show the applied filters -->
+<p>Filters Applied:</p>
+<ul>
+    <li>Genre: {{ filters.genre|default:"Any" }}</li>
+    <li>Author: {{ filters.author|default:"Any" }}</li>
+    <li>Pages: {{ filters.min_pages }} - {{ filters.max_pages }}</li>
+</ul>
+
+<!-- Display the list of books -->
+{% if books %}
+    <ul>
+        {% for book in books %}
+            <li>
+                <strong>{{ book.title }}</strong><br>
+                Author: {{ book.author }}<br>
+                Genre: {{ book.genre }}<br>
+                Pages: {{ book.page_count }}<br>
+                Published: {{ book.publication_date }}
+            </li>
+        {% endfor %}
+    </ul>
+{% else %}
+    <p>No books found matching the criteria.</p>
+{% endif %}
 {% endblock %}

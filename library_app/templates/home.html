@@ -2,4 +2,29 @@
 {% block content %}
 <h1>Welcome to the Library</h1>
 <p>Search for books and manage your account.</p>
+<form method="get" action="{% url 'display_book' %}">
+    <div>
+        <label for="genre">Genre:</label>
+        <input type="text" id="genre" name="genre" placeholder="Enter genre" />
+    </div>
+    
+    <div>
+        <label for="author">Author Name:</label>
+        <input type="text" id="author" name="author" placeholder="Enter author name" />
+    </div>
+
+    <div>
+        <label for="min_pages">Min Pages:</label>
+        <input type="number" id="min_pages" name="min_pages" placeholder="Min pages" />
+    </div>
+
+    <div>
+        <label for="max_pages">Max Pages:</label>
+        <input type="number" id="max_pages" name="max_pages" placeholder="Max pages" />
+    </div>
+
+    <div>
+        <button type="submit">Search</button>
+    </div>
+</form>
 {% endblock %}
