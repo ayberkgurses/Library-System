@@ -83,6 +83,8 @@ def manage_books(request):
         page_num = request.POST.get('page_num')
         publisher = request.POST.get('publisher')
         library_id = request.POST.get('library_id')
+        author_id = request.POST.get('author_id')
+
 
         with connection.cursor() as cursor:
             if action == 'add':
@@ -90,10 +92,10 @@ def manage_books(request):
                 if title and language and page_num and publisher and library_id:
                     cursor.execute(
                         """
-                        INSERT INTO books (title, language, page_num, publisher, library_id) 
-                        VALUES (%s, %s, %s, %s, %s)
+                        INSERT INTO books (title, author_id, language, page_num, publisher, library_id) 
+                        VALUES (%s, %s, %s, %s, %s, %s)
                         """,
-                        [title, language, page_num, publisher, library_id]
+                        [title, author_id, language, page_num, publisher, library_id]
                     )
                     return HttpResponse(f"Book '{title}' added successfully.")
                 else:
