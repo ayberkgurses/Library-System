@@ -4,13 +4,13 @@ from sqlalchemy import create_engine
 DB_USERNAME = 'root'
 DB_PASSWORD = 'yourpassword' #-> write your OWN password when you run it.
 DB_HOST = 'localhost' 
-DB_NAME = 'librarydb'
+DB_NAME = 'temp'
 
 # Create a connection to the MySQL database
 engine = create_engine(f'mysql+pymysql://{DB_USERNAME}:{DB_PASSWORD}@{DB_HOST}/{DB_NAME}')
 
 # CSV file
-csv_file = 'niceBook.csv'  
+csv_file = 'creatingDB\ niceBook.csv'  
 try:
     # Try reading the CSV and handle potential errors with inconsistent columns
     df = pd.read_csv(csv_file, on_bad_lines='skip')

@@ -4,12 +4,12 @@ from django.urls import reverse
 
 def home(request):
     if request.method == "GET":
-        # Retrieve filter values from the GET request
+        
         genre = request.GET.get('genre', '').strip()
         author = request.GET.get('author', '').strip()
         pages = request.GET.get('pages', '').strip()
 
-        # Prepare parameters to pass to display_book
+        
         query_params = {}
         if genre:
             query_params['genre'] = genre
@@ -18,7 +18,7 @@ def home(request):
         if pages:
             query_params['pages'] = pages
 
-        # If filters are provided, redirect to display_book with filters
+        
         if query_params:
             query_string = '&'.join([f"{key}={value}" for key, value in query_params.items()])
             return HttpResponseRedirect(reverse('display_book') + f"?{query_string}")
@@ -30,6 +30,7 @@ def home(request):
     print("home.html is rendered")
     return render(request, 'home.html')
 
+#manipulating authors
 def manage_authors(request):
     if request.method == "POST":
         action = request.POST.get('action')
@@ -37,18 +38,18 @@ def manage_authors(request):
         author_name = request.POST.get('author_name')
 
 
-        # Handle the form submission based on the action
+        # based on the action : 
         with connection.cursor() as cursor:
             if action == 'add':
                 if author_name:
-                    cursor.execute("INSERT INTO authors (author_name) VALUES (%s)", [author_name]) 
+                    cursor.execute("INSERT INTO authors (author_id, author_name) VALUES (%s, %s)", [author_id, author_name]) 
                     return HttpResponse("Author added successfully")
                 else:
                     return HttpResponse(f"Author name is required to add authors", status=400)
             elif action == 'delete':
-                # Delete author logic
+                
                 if author_id:
-                    cursor.execute("DELETE FROM authors WHERE author_id = %s", [author_id]) #could also be author_id instead of id
+                    cursor.execute("DELETE FROM authors WHERE author_id = %s", [author_id]) 
                     if cursor.rowcount > 0:
                         return HttpResponse(f"Author with ID {author_id} deleted successfully.")
                     else:
@@ -56,10 +57,10 @@ def manage_authors(request):
                 else:
                     return HttpResponse("Author ID is required.", status=400)
             elif action == 'update':
-                # Update author logic
+                
                 if author_id and author_name:
                     cursor.execute(
-                        "UPDATE authors SET author_name = %s WHERE author_id = %s", #could also be author_id instead of id
+                        "UPDATE authors SET author_name = %s WHERE author_id = %s",
                         [author_name, author_id]
                     )
                     if cursor.rowcount > 0:
@@ -73,7 +74,7 @@ def manage_authors(request):
     
     return render(request, 'manage_authors.html')
 
-
+#manipulating books
 def manage_books(request):
     if request.method == "POST":
         action = request.POST.get('action')
@@ -88,21 +89,21 @@ def manage_books(request):
 
         with connection.cursor() as cursor:
             if action == 'add':
-                # Add book logic
+                
                 if title and language and page_num and publisher and library_id:
                     cursor.execute(
                         """
-                        INSERT INTO books (title, author_id, language, page_num, publisher, library_id) 
-                        VALUES (%s, %s, %s, %s, %s, %s)
+                        INSERT INTO books (book_id, title, author_id, language, page_num, publisher, library_id) 
+                        VALUES (%s, %s, %s, %s, %s, %s, %s)
                         """,
-                        [title, author_id, language, page_num, publisher, library_id]
+                        [book_id, title, author_id, language, page_num, publisher, library_id]
                     )
                     return HttpResponse(f"Book '{title}' added successfully.")
                 else:
                     return HttpResponse("All fields are required to add a book.", status=400)
 
             elif action == 'delete':
-                # Delete book logic
+                
                 if book_id:
                     cursor.execute("DELETE FROM books WHERE book_id = %s", [book_id])
                     if cursor.rowcount > 0:
@@ -113,7 +114,7 @@ def manage_books(request):
                     return HttpResponse("Book ID is required.", status=400)
 
             elif action == 'update':
-                # Update book logic
+                
                 if book_id and title and language and page_num and publisher and library_id:
                     cursor.execute(
                         """
@@ -132,18 +133,14 @@ def manage_books(request):
 
         return HttpResponse("Invalid action.", status=400)
 
-    # Fetch books for display
+    
     with connection.cursor() as cursor:
         cursor.execute("SELECT book_id, title, language, page_num, publisher, library_id FROM books")
         books = cursor.fetchall()
 
     return render(request, 'manage_books.html', {'books': books})
 
-
-from django.db import connection
-from django.shortcuts import render
-from django.http import HttpResponse
-
+#manipulating members
 def manage_members(request):
     if request.method == "POST":
         action = request.POST.get('action')
@@ -156,7 +153,7 @@ def manage_members(request):
 
         with connection.cursor() as cursor:
             if action == 'add':
-                # Add member logic
+                
                 if first_name and last_name and mail and phone_num and membership_date:
                     cursor.execute(
                         """
@@ -170,7 +167,7 @@ def manage_members(request):
                     return HttpResponse("All fields are required to add a member.", status=400)
 
             elif action == 'delete':
-                # Delete member logic
+                
                 if member_id:
                     cursor.execute("DELETE FROM members WHERE member_id = %s", [member_id])
                     if cursor.rowcount > 0:
@@ -181,7 +178,7 @@ def manage_members(request):
                     return HttpResponse("Member ID is required.", status=400)
 
             elif action == 'update':
-                # Update member logic
+                
                 if member_id and first_name and last_name and mail and phone_num and membership_date:
                     cursor.execute(
                         """
@@ -207,11 +204,7 @@ def manage_members(request):
 
     return render(request, 'manage_members.html', {'members': members})
 
-
-from django.db import connection
-from django.shortcuts import render
-from django.http import HttpResponse
-
+#manipulating loans
 def loan_book(request):
     if request.method == "POST":
         action = request.POST.get('action')
@@ -224,21 +217,31 @@ def loan_book(request):
 
         with connection.cursor() as cursor:
             if action == 'add':
-                # Add loan logic
+                
                 if book_id and member_id and loan_date and due_date:
-                    cursor.execute(
-                        """
-                        INSERT INTO loans (book_id, member_id, loan_date, due_date, return_date) 
-                        VALUES (%s, %s, %s, %s, %s)
-                        """,
-                        [book_id, member_id, loan_date, due_date, return_date]
-                    )
+                    if return_date =='':
+                        cursor.execute(
+                            """
+                            INSERT INTO loans (loan_id, book_id, member_id, loan_date, due_date) 
+                            VALUES (%s,%s, %s, %s, %s)
+                            """,
+                            [loan_id,book_id, member_id, loan_date, due_date]
+                        )
+                    else:
+                        cursor.execute(
+                            """
+                            INSERT INTO loans (loan_id, book_id, member_id, loan_date, due_date, return_date) 
+                            VALUES (%s, %s, %s, %s, %s, %s)
+                            """,
+                            [loan_id, book_id, member_id, loan_date, due_date,return_date]
+                        )
+
                     return HttpResponse(f"Loan added successfully for Book ID {book_id} and Member ID {member_id}.")
                 else:
                     return HttpResponse("Book ID, Member ID, Loan Date, and Due Date are required.", status=400)
 
             elif action == 'delete':
-                # Delete loan logic
+                
                 if loan_id:
                     cursor.execute("DELETE FROM loans WHERE loan_id = %s", [loan_id])
                     if cursor.rowcount > 0:
@@ -249,7 +252,7 @@ def loan_book(request):
                     return HttpResponse("Loan ID is required.", status=400)
 
             elif action == 'update':
-                # Update loan logic
+                
                 if loan_id and book_id and member_id and loan_date and due_date:
                     cursor.execute(
                         """

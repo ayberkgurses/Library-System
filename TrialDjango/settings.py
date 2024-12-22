@@ -77,7 +77,7 @@ WSGI_APPLICATION = 'TrialDjango.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'librarydb',
+        'NAME': 'temp',
         'USER': 'root',
         'PASSWORD': '2004emre',
         'HOST': '127.0.0.1',

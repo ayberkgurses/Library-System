@@ -41,11 +41,11 @@ from sqlalchemy import create_engine
 db_user = 'root'
 db_password = 'yourpassword' #-> write your OWN password when you run it.
 db_host = 'localhost'
-db_name = 'librarydb'
+db_name = 'temp'
 
 connection_string = f'mysql+mysqlconnector://{db_user}:{db_password}@{db_host}/{db_name}'
 engine = create_engine(connection_string)
 
-libraries_df = pd.read_csv('libraries.csv')
+libraries_df = pd.read_csv('creatingDB\libraries.csv')
 libraries_df.to_sql('library', con=engine, if_exists='append', index=False)
 print("Data from 'libraries.csv' has been successfully inserted into the 'library' table.")
